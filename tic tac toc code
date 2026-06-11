@@ -1,0 +1,48 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    char replay;
+    do {
+        char board[9] = {'1','2','3','4','5','6','7','8','9'};
+        char player = 'X';
+        int moves = 0, choice;
+        bool win = false;
+
+        while (moves < 9 && !win) {
+            // Dynamic Board Display
+            system("clear || cls"); 
+            cout << "\n=== TIC TAC TOE ===\n\n";
+            for (int i = 0; i < 9; i += 3) {
+                cout << " " << board[i] << " | " << board[i+1] << " | " << board[i+2] << "\n";
+                if (i < 6) cout << "---|---|---\n";
+            }
+
+            cout << "\nPlayer " << player << ", enter slot (1-9): ";
+            if (!(cin >> choice) || choice < 1 || choice > 9 || board[choice-1] == 'X' || board[choice-1] == 'O') {
+                cin.clear(); cin.ignore(10000, '\n'); continue; // Simple error handling
+            }
+
+            board[choice-1] = player;
+            moves++;
+
+            // Condense Win Detection
+            int w[8][3] = {{0,1,2},{3,4,5},{6,7,8},{0,3,6},{1,4,7},{2,5,8},{0,4,8},{2,4,6}};
+            for (int i = 0; i < 8; i++) {
+                if (board[w[i][0]] == board[w[i][1]] && board[w[i][1]] == board[w[i][2]]) win = true;
+            }
+
+            if (!win) player = (player == 'X') ? 'O' : 'X';
+        }
+
+        // Output Result
+        system("clear || cls");
+        if (win) cout << "\nPlayer " << player << " wins!\n";
+        else cout << "\nIt's a draw!\n";
+
+        cout << "\nPlay again? (y/n): ";
+        cin >> replay;
+    } while (replay == 'y' || replay == 'Y');
+
+    return 0;
+}
